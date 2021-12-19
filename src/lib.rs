@@ -42,13 +42,13 @@ pub mod pdf_backend {
         // let _documents = vec!["C:\Users\steph\OneDrive\Documents\University\HRM\\HRM_assignment.pdf","C:\\Users\\steph\\OneDrive\\Documents\\University\\HRM\\7aad0062 HRM Coursework 1 AssignmentBriefingSheet_2021-22 final-2.pdf" ];
     return(pdf_files,output_path)
     }
-    pub fn load_pdfs(filepath: &Vec<String>)->Vec<Document>
+    pub fn load_pdfs(filepath: &Vec<String>)->(Vec<Document>,(Vec<String>, String))
     {
         // let mut cleaned_args:(String, Vec<String>) = Vec::new();
         let cleaned_args=clean_args(filepath);
         info!("{:?}",&cleaned_args);
         let mut documents=Vec::new();
-        for path in cleaned_args.0{
+        for path in &cleaned_args.0{
             print!("{}",path);
             let mut doc_res = Document::load(&path);
             let mut doc = match doc_res {
@@ -58,9 +58,9 @@ pub mod pdf_backend {
             doc.version = "1.5".to_string(); 
             documents.push(doc);
         }
-        documents}
+        (documents,cleaned_args)}
 
-    pub fn merge_pdfs(documents:Vec<Document>){
+    pub fn merge_pdfs(documents:Vec<Document>,filepath:String){
         // Define a starting max_id (will be used as start index for object_ids)
     let mut max_id = 1;
     let mut pagenum = 1;
@@ -231,7 +231,7 @@ pub mod pdf_backend {
     document.compress();
 
     // Save the merged PDF
-    document.save("merged.pdf").unwrap();
+    document.save(&format!("{}\\merged.pdf",filepath)).unwrap();
 }
     }
 

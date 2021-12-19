@@ -57,7 +57,7 @@ fn get_arguments()
             info!("merge command called");
             let filepath = &args;
             let mut documents=load_pdfs(filepath);
-            merge_pdfs(documents)
+            merge_pdfs(documents.0,documents.1.1);
             
         } 
         else 
